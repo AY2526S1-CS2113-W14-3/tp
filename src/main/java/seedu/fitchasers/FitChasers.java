@@ -17,6 +17,7 @@ public class FitChasers {
      *
      * @param args command line arguments (not used)
      */
+
     public static void main(String[] args) {
         UI ui = new UI();
         WorkoutManager workoutManager = new WorkoutManager();
