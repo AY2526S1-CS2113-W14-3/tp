@@ -38,6 +38,24 @@ public class UI {
         return scanner.nextLine().trim();
     }
 
+    public String promptForName() {
+        System.out.print("First time here! What's your name? > ");
+        String name = scanner.nextLine().trim();
+        while (name.isEmpty()) {
+            System.out.print("Name cannot be empty. Try again > ");
+            name = scanner.nextLine().trim();
+        }
+        return name;
+    }
+
+    public void showUserHeader(Person person) {
+        System.out.println("Name: " + person.getName());
+    }
+
+    public void showWelcome(String name) {
+        System.out.println("Welcome, " + name + "!");
+    }
+
     /**
      * Displays a standard informational message in green color,
      * followed by a divider for readability.

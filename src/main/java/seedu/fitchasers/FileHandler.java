@@ -49,6 +49,34 @@ public class FileHandler {
         }
     }
 
+
+    public boolean isFirstRun() throws IOException {
+        ensureFile();
+        return Files.size(FILE_PATH) == 0L;
+    }
+
+    public void savePerson(Person person) throws IOException {
+        ensureFile();
+        // For first-run, write only the USER line. Workouts (if any) will be appended by saveFile later.
+        try (FileWriter fw = new FileWriter(FILE_PATH.toFile())) {
+            fw.write("USER | " + person.getName() + "\n");
+        }
+    }
+
+    public String loadPersonNameOrDefault(String fallback) throws IOException {
+        ensureFile();
+        List<String> lines = Files.readAllLines(FILE_PATH);
+        for (String line : lines) {
+            if (line.startsWith("USER")) {
+                String[] parts = line.split("\\|");
+                if (parts.length >= 2) {
+                    return parts[1].trim();
+                }
+            }
+        }
+        return fallback;
+    }
+
     /**
      * Loads all workout and exercise data from save.txt into the given WorkoutManager.
      *
@@ -67,6 +95,10 @@ public class FileHandler {
         Workout currentWorkout = null;
 
         for (String line : lines) {
+            if (line.startsWith("USER")) {
+                continue; // skip the user header line
+            }
+
             if (line.startsWith("WORKOUT")) {
                 try {
                     String[] parts = line.split("\\|");
@@ -106,15 +138,16 @@ public class FileHandler {
 
     /**
      * Saves all workout data to save.txt in the specified format.
-     *
      * Each save overwrites the entire file.
      *
+     * @param person persosn's name to be saved
      * @param workouts list of workouts to be saved
      * @throws IOException if writing fails
      */
-    public void saveFile(List<Workout> workouts) throws IOException {
+    public void saveFile(List<Workout> workouts, Person person) throws IOException {
         ensureFile();
         try (FileWriter fw = new FileWriter(FILE_PATH.toFile())) {
+            fw.write("USER | " + person.getName() + "\n");
             for (Workout w : workouts) {
                 fw.write("WORKOUT | " + w.getWorkoutName() + " | " + w.getDuration() + "\n");
                 for (Exercise ex : w.getExercises()) {
