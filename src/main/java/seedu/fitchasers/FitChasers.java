@@ -1,10 +1,12 @@
 package seedu.fitchasers;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 
 /**
  * Main entry point for the FitChasers application.
+ *
  * Handles user input commands, delegates operations to WorkoutManager,
  * and persists data through FileHandler.
  */
@@ -21,6 +23,7 @@ public class FitChasers {
         WorkoutManager workoutManager = new WorkoutManager();
         FileHandler fileHandler = new FileHandler();
         Person person;
+        Scanner scanner = new Scanner(System.in);
 
         ui.showGreeting();
 
@@ -101,7 +104,7 @@ public class FitChasers {
                 case "/end_workout":
                     ui.showMessage("Workout wrapped! Time to refuel!");
                     // Format: /end_workout d/DD/MM/YY t/HHmm
-                    workoutManager.endWorkout(argumentStr);
+                    workoutManager.endWorkout(scanner, argumentStr);
                     ui.showDivider();
                     break;
 
