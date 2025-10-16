@@ -1,5 +1,6 @@
 package seedu.fitchasers;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -35,14 +36,18 @@ public class UI {
      */
     public String readCommand() {
         System.out.print(MAGENTA + "Enter command" + RESET + " > ");
-        if (scanner.hasNextLine()) {
-            String command = scanner.nextLine();
-            // process command
-        } else {
-            // handle case: no input (e.g., exit, default, or error message)
-            System.out.println("No input provided.");
+        try {
+            // Defensive: check before reading to avoid NoSuchElementException
+            if (scanner.hasNextLine()) {
+                return scanner.nextLine().trim();
+            } else {
+                // gracefully handle EOF / no input available
+                return "";
+            }
+        } catch (NoSuchElementException e) {
+            // Unexpected end-of-input: return empty command instead of crashing tests
+            return "";
         }
-        return scanner.nextLine().trim();
     }
 
     /**

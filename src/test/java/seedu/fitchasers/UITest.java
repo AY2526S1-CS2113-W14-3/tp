@@ -111,6 +111,7 @@ class UITest {
     // ----------------------------------------------------
     @Test
     void readCommand_readsAndReturnsTrimmedInput() {
+        // provide input BEFORE constructing UI to ensure UI reads from the replaced System.in
         String simulatedInput = "   /exit   \n";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
         ui = new UI(); // recreate with the new System.in
