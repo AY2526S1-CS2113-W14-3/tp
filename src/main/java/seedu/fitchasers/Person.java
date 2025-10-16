@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Person {
 
     /** The name of the person */
-    private final String name;
+    private String name;
 
     /** The list of weight records for the person */
     private final ArrayList<WeightRecord> weightHistory;
@@ -32,6 +32,15 @@ public class Person {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Sets the name of the person.
+     *
+     * @param name The person's new name
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
