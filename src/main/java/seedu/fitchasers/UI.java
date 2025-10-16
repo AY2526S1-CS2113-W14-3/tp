@@ -37,16 +37,16 @@ public class UI {
     public String readCommand() {
         System.out.print(MAGENTA + "Enter command" + RESET + " > ");
         try {
-            // Defensive: check before reading to avoid NoSuchElementException
+            // If there's another line, read and return trimmed string.
             if (scanner.hasNextLine()) {
                 return scanner.nextLine().trim();
             } else {
-                // gracefully handle EOF / no input available
-                return "";
+                // No more input available (EOF) — signal caller to terminate.
+                return null;
             }
         } catch (NoSuchElementException e) {
-            // Unexpected end-of-input: return empty command instead of crashing tests
-            return "";
+            // Unexpected end-of-input: signal EOF to caller.
+            return null;
         }
     }
 
