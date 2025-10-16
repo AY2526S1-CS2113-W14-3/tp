@@ -1,5 +1,6 @@
 package seedu.fitchasers;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -35,7 +36,18 @@ public class UI {
      */
     public String readCommand() {
         System.out.print(MAGENTA + "Enter command" + RESET + " > ");
-        return scanner.nextLine().isEmpty() ? scanner.nextLine() : scanner.nextLine().trim();
+        try {
+            if (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                return line == null ? "" : line.trim();
+            } else {
+                // No input available (e.g., input stream closed); return an empty string
+                return "";
+            }
+        } catch (NoSuchElementException e) {
+            // Defensive fallback if the underlying input is unexpectedly closed
+            return "";
+        }
     }
 
     /**
