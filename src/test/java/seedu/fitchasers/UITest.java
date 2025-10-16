@@ -21,18 +21,21 @@ class UITest {
     private UI ui;
     private ByteArrayOutputStream outContent;
     private PrintStream originalOut;
+    private java.io.InputStream originalIn;
 
     @BeforeEach
     void setUp() {
         ui = new UI();
         outContent = new ByteArrayOutputStream();
         originalOut = System.out;
+        originalIn = System.in; // save original System.in
         System.setOut(new PrintStream(outContent));
     }
 
     @AfterEach
     void tearDown() {
         System.setOut(originalOut);
+        System.setIn(originalIn);
     }
 
     // ----------------------------------------------------
