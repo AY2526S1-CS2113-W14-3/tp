@@ -206,12 +206,17 @@ public class WorkoutManager {
 
     /**
      * Displays all workouts and their exercises in a formatted list.
+     *
+     * Now accepts a Person parameter to include owner's name in headers.
      */
-    public void viewWorkouts() {
+    public void viewWorkouts(Person person) {
         if (workouts.isEmpty()) {
             ui.showMessage("No workouts recorded yet!");
             return;
         }
+
+        String owner = (person != null && person.getName() != null) ? person.getName() : "User";
+        ui.showMessage("Workout summary for " + owner + ":");
 
         for (int i = 0; i < workouts.size(); i++) {
             Workout w = workouts.get(i);

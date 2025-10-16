@@ -21,14 +21,14 @@ public class FitChasers {
     public static void main(String[] args) {
         UI ui = new UI();
         WorkoutManager workoutManager = new WorkoutManager();
-        FileHandler fileHandler = new FileHandler();
+        Scanner scanner = new Scanner(System.in);
+        FileHandler fileHandler = new FileHandler(ui, scanner);
         Person person = new Person("Nary");
         WeightManager weightManager = new WeightManager(person);
-        Scanner scanner = new Scanner(System.in);
 
-        // Attempt to load persistent data
+        // Attempt to load persistent data (may create file and ask for name if interactive)
         try {
-            fileHandler.loadFileContentArray(workoutManager);
+            fileHandler.loadFileContentArray(workoutManager, person);
         } catch (IOException e) {
             ui.showError("Could not load saved data. Starting fresh!");
         }
@@ -96,7 +96,7 @@ public class FitChasers {
 
                 case "/view_log":
                     ui.showMessage("Here's your workout glow-up history!");
-                    workoutManager.viewWorkouts();
+                    workoutManager.viewWorkouts(person);
                     ui.showDivider();
                     break;
 
@@ -110,7 +110,7 @@ public class FitChasers {
                 case "/exit":
                     ui.showMessage("Saving your progress...");
                     try {
-                        fileHandler.saveFile(workoutManager.getWorkouts());
+                        fileHandler.saveFile(workoutManager.getWorkouts(), person);
                         ui.showExitMessage();
                     } catch (IOException e) {
                         ui.showError("Failed to save workouts before exit.");
