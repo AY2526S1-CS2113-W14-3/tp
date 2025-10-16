@@ -35,6 +35,13 @@ public class UI {
      */
     public String readCommand() {
         System.out.print(MAGENTA + "Enter command" + RESET + " > ");
+        if (scanner.hasNextLine()) {
+            String command = scanner.nextLine();
+            // process command
+        } else {
+            // handle case: no input (e.g., exit, default, or error message)
+            System.out.println("No input provided.");
+        }
         return scanner.nextLine().trim();
     }
 
