@@ -35,7 +35,7 @@ public class UI {
      */
     public String readCommand() {
         System.out.print(MAGENTA + "Enter command" + RESET + " > ");
-        return scanner.nextLine().trim();
+        return scanner.nextLine().isEmpty() ? scanner.nextLine() : scanner.nextLine().trim();
     }
 
     /**
