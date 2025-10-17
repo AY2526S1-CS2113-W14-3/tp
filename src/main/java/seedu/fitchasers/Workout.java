@@ -5,7 +5,9 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
+import java.util.LinkedHashSet;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Represents a workout session containing a name, duration, start/end times, and a list of exercises.
@@ -17,6 +19,15 @@ public class Workout implements Serializable{
     private LocalDateTime workoutEndDateTime;
     private final ArrayList<Exercise> exercises = new ArrayList<>();
     private Exercise currentExercise = null;
+    private Set<String> tags = new LinkedHashSet<>();   // multiple tags
+
+    public Set<String> getTags() {
+        return tags == null ? Set.of() : tags;
+    }
+
+    public void setTags(Set<String> tags) {
+        this.tags = new LinkedHashSet<>(tags);
+    }
 
     public Workout(String workoutName, int duration) {
         this.workoutName = workoutName;
