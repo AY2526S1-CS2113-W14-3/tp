@@ -21,14 +21,6 @@ public class Workout implements Serializable{
     private Exercise currentExercise = null;
     private Set<String> tags = new LinkedHashSet<>();   // multiple tags
 
-    public Set<String> getTags() {
-        return tags == null ? Set.of() : tags;
-    }
-
-    public void setTags(Set<String> tags) {
-        this.tags = new LinkedHashSet<>(tags);
-    }
-
     public Workout(String workoutName, int duration) {
         this.workoutName = workoutName;
         this.duration = duration;
@@ -46,6 +38,13 @@ public class Workout implements Serializable{
         this.duration = calculateDuration();
     }
 
+    public Set<String> getTags() {
+        return tags == null ? Set.of() : tags;
+    }
+
+    public void setTags(Set<String> tags) {
+        this.tags = new LinkedHashSet<>(tags);
+    }
 
     public String getWorkoutName() {
         return workoutName;
