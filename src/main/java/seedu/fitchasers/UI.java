@@ -50,6 +50,11 @@ public class UI {
         }
     }
 
+    public String promptForName() {
+        System.out.print(MAGENTA + "Enter your name: " + RESET);
+        return scanner.nextLine().trim();
+    }
+
     /**
      * Displays a standard informational message in green color,
      * followed by a divider for readability.
@@ -108,6 +113,8 @@ public class UI {
      */
     public void showHelp() {
         System.out.println("/help                                - View all commands");
+        System.out.println("/my_name n/NAME                        - Set your display name"
+                + " (e.g. /my_name n/Nitin)");
         System.out.println("/add_weight w/WEIGHT d/DATE          - Record your weight "
                 + "(e.g. /add_weight w/81.5 d/19/10/25)");
         System.out.println("/create_workout n/NAME d/DATE t/TIME - Create a new workout "
