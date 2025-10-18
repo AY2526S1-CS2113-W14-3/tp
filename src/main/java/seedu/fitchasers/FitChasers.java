@@ -25,7 +25,7 @@ public class FitChasers {
     public static void main(String[] args) throws IOException {
         UI ui = new UI();
         WorkoutManager workoutManager = new WorkoutManager();
-        FileHandler fileHandler = new FileHandler();
+        //FileHandler fileHandler = new FileHandler();
         Person person = new Person("Nary");
         WeightManager weightManager = new WeightManager(person);
         Scanner scanner = new Scanner(System.in);
@@ -34,19 +34,8 @@ public class FitChasers {
 
         // Attempt to load persistent datai by month
         // #TODO add select month #TODO need to add seperate month to current month check!
-        try {
-            workoutManager.setWorkouts(fileHandler.loadMonthList(currentMonth));
-            ui.showMessage("Loaded " + currentMonth + " workouts");
-        } catch ( FileNonexistent e) {
-            ui.showError("Seems like this is a new month!"
-                    + "\n Would you like to create new workouts for this month? (Y/N)" );
-            if(ui.confirmationMessage()) {
-                fileHandler.saveMonthList(currentMonth,new ArrayList<>());
-                workoutManager.setWorkouts(new ArrayList<>());
-            }
-        }catch(IOException e) {
-            ui.showError(e.getMessage());
-        }
+
+
         //viewLog = new ViewLog(ui,workoutManager);
         ui.showGreeting();
 
@@ -148,12 +137,7 @@ public class FitChasers {
 
                 case "/exit":
                     ui.showMessage("Saving your progress...");
-                    try {
-                        fileHandler.saveMonthList(currentMonth, workoutManager.getWorkouts());
-                        ui.showExitMessage();
-                    } catch (IOException e) {
-                        ui.showError("Failed to save workouts before exit.");
-                    }
+
                     isRunning = false;
                     break;
 
