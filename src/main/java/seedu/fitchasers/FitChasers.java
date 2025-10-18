@@ -1,10 +1,10 @@
 package seedu.fitchasers;
 
-import seedu.fitchasers.exceptions.FileNonexistent;
+//import seedu.fitchasers.exceptions.FileNonexistent;
 
 import java.io.IOException;
 import java.time.YearMonth;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.Scanner;
 
 
