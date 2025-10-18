@@ -49,7 +49,8 @@
 //        int totalPages = computeTotalPages(sortedArray.size(), pageSize);
 //
 //
-//        ui.showMessage(String.format("Workouts (%d total) — Page %d/%d", sortedArray.size(), currentPage, totalPages));
+//        ui.showMessage(String.format("Workouts (%d total) —
+//        Page %d/%d", sortedArray.size(), currentPage, totalPages));
 //        if (sortedArray.isEmpty()) {
 //            ui.showMessage("No workouts this month.");
 //            return;
