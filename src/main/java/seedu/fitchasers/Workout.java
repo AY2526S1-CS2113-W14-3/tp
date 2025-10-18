@@ -1,6 +1,6 @@
 package seedu.fitchasers;
 
-import java.io.Serializable;
+//import java.io.Serializable;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
@@ -10,7 +10,7 @@ import java.util.Locale;
 /**
  * Represents a workout session containing a name, duration, start/end times, and a list of exercises.
  */
-public class Workout implements Serializable{
+public class Workout{
     private String workoutName;
     private int duration = 0;
     private LocalDateTime workoutStartDateTime;
