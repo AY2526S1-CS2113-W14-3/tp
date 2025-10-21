@@ -8,6 +8,7 @@ import java.util.ArrayList;
  */
 public class Person {
 
+    private final UI ui = new UI();
     /** The name of the person */
     private final String name;
 
@@ -58,10 +59,11 @@ public class Person {
      */
     public void displayWeightHistory() {
         if (weightHistory.isEmpty()) {
-            System.out.println(name + " has no weight records yet.");
+            ui.showMessage(name + " has no weight records yet.");
             return;
         }
-        System.out.println("Weight history for " + name + ":");
+        ui.showMessage("Here's your weight, you've been killin' it lately!");
+        ui.showMessage("Weight history for " + name + ":");
         for (WeightRecord record : weightHistory) {
             System.out.println("  " + record);
         }

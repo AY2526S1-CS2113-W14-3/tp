@@ -40,6 +40,7 @@ public class WeightManager {
 
             WeightRecord record = new WeightRecord(weight, date);
             person.addWeightRecord(record);
+            ui.showMessage("Logging your weight... don't lie to me!");
             ui.showMessage("Recorded new weight: " + record);
         } catch (Exception e) {
             ui.showMessage("Invalid format. Example: /add_weight w/81.5 d/19/10/25");
