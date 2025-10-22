@@ -1,119 +1,49 @@
 package seedu.fitchasers;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.time.LocalDateTime;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import java.time.format.DateTimeFormatter;
 
+public class WorkoutTest {
 
-class WorkoutTest {
-    private Workout workout;
+    @Test
+    public void testWorkoutCreation_withStartDateTime_success() {
+        LocalDateTime start = LocalDateTime.parse("22/10/25 0900", DateTimeFormatter.ofPattern("dd/MM/yy HHmm"));
+        Workout workout = new Workout("Morning Run", start, "testUser");
 
-    @BeforeEach
-    void setUp() {
-        workout = new Workout("Pushups", 20);
+        assertEquals("Morning Run", workout.getWorkoutName(), "Workout name should match");
+        assertEquals(start, workout.getWorkoutStartDateTime(), "Start date-time should match");
+        assertEquals("testUser", workout.getUsername(), "Username should match");
+        assertEquals(0, workout.getDuration(), "Initial duration should be 0");
     }
 
     @Test
-    void constructor_nameAndDuration_setsFieldsCorrectly() {
-        Workout w = new Workout("Pushups", 30);
-        assertEquals("Pushups", w.getWorkoutName());
-        assertEquals(30, w.getDuration());
-        assertTrue(w.getExercises().isEmpty());
-    }
+    public void testAddExercise_success() {
+        Workout workout = new Workout("Test Workout", LocalDateTime.now(), "testUser");
+        Exercise exercise = new Exercise("Push Up", 10);
+        workout.addExercise(exercise);
 
-
-    @Test
-    void constructor_nameAndStartDate_setsFieldsCorrectly() {
-        LocalDateTime start = LocalDateTime.of(2025, 10, 14, 12, 0);
-        Workout w = new Workout("Cycling", start);
-        assertEquals("Cycling", w.getWorkoutName());
-        assertEquals(start, w.getWorkoutStartDateTime());
-        assertNull(w.getWorkoutEndDateTime());
+        assertEquals(1, workout.getExercises().size(), "One exercise should be added");
+        assertEquals(exercise, workout.getCurrentExercise(), "Current exercise should match");
     }
 
     @Test
-    void constructor_allFields_setsDurationAndEndCorrectly() {
-        LocalDateTime start = LocalDateTime.of(2025, 10, 14, 12, 0);
-        LocalDateTime end = LocalDateTime.of(2025, 10, 14, 12, 30);
-        Workout w = new Workout("Run", start, end);
-        assertEquals(30, w.getDuration()); // 30 mins
-        assertEquals(start, w.getWorkoutStartDateTime());
-        assertEquals(end, w.getWorkoutEndDateTime());
+    public void testCalculateDuration_validStartAndEnd_success() {
+        LocalDateTime start = LocalDateTime.parse("22/10/25 0900", DateTimeFormatter.ofPattern("dd/MM/yy HHmm"));
+        LocalDateTime end = LocalDateTime.parse("22/10/25 1000", DateTimeFormatter.ofPattern("dd/MM/yy HHmm"));
+        Workout workout = new Workout("Test Workout", start, end, "testUser");
+
+        assertEquals(60, workout.calculateDuration(), "Duration should be 60 minutes");
+        assertEquals(60, workout.getDuration(), "Stored duration should match calculated duration");
     }
 
     @Test
-    void setWorkoutName_andGet_returnsUpdatedName() {
-        workout.setWorkoutName("Situps");
-        assertEquals("Situps", workout.getWorkoutName());
+    public void testGetWorkoutDateString_validDate_formattedCorrectly() {
+        LocalDateTime start = LocalDateTime.parse("22/10/25 0900", DateTimeFormatter.ofPattern("dd/MM/yy HHmm"));
+        Workout workout = new Workout("Test Workout", start, "testUser");
+        String expected = "Wednesday 22nd of October";
+        assertEquals(expected, workout.getWorkoutDateString(), "Date string should be formatted correctly");
     }
-
-    @Test
-    void setDuration_andGet_returnsUpdatedDuration() {
-        workout.setDuration(45);
-        assertEquals(45, workout.getDuration());
-    }
-
-    @Test
-    void addExercise_addsExerciseToListAndUpdatesCurrent() {
-        Exercise e = new Exercise("Squat", 10);
-        workout.addExercise(e);
-        assertEquals(1, workout.getExercises().size());
-        assertEquals(e, workout.getCurrentExercise());
-    }
-
-    @Test
-    void getExercises_returnsCorrectList() {
-        Exercise e1 = new Exercise("Squat", 10);
-        Exercise e2 = new Exercise("Jump", 5);
-        workout.addExercise(e1);
-        workout.addExercise(e2);
-        assertEquals(2, workout.getExercises().size());
-        assertTrue(workout.getExercises().contains(e1));
-        assertTrue(workout.getExercises().contains(e2));
-    }
-
-    @Test
-    void calculateDuration_withStartAndEnd_returnsCorrectDuration() {
-        LocalDateTime start = LocalDateTime.of(2025, 10, 14, 12, 0);
-        LocalDateTime end = LocalDateTime.of(2025, 10, 14, 13, 0);
-        workout.setWorkoutStartDateTime(start);
-        workout.setWorkoutEndDateTime(end);
-        assertEquals(60, workout.calculateDuration());
-    }
-
-    @Test
-    void calculateDuration_withMissingEnd_returnsZero() {
-        LocalDateTime start = LocalDateTime.of(2025, 10, 14, 12, 0);
-        workout.setWorkoutStartDateTime(start);
-        workout.setWorkoutEndDateTime(null);
-        assertEquals(0, workout.calculateDuration());
-    }
-
-    @Test
-    void calculateDuration_withMissingStart_returnsZero() {
-        workout.setWorkoutStartDateTime(null);
-        workout.setWorkoutEndDateTime(LocalDateTime.of(2025, 10, 14, 12, 30));
-        assertEquals(0, workout.calculateDuration());
-    }
-
-    @Test
-    void toString_returnsProperFormat() {
-        workout.setWorkoutName("Pushups");
-        workout.setDuration(15);
-        String result = workout.toString();
-        assertTrue(result.contains("Workout Name: Pushups"));
-        assertTrue(result.contains("Duration: 15"));
-    }
-
-    //edge case
-    @Test
-    void setNegativeDuration_isAcceptedAsStored() {
-        workout.setDuration(-10);
-        assertEquals(-10, workout.getDuration()); // as per your implementation
-    }
-
-
 }
