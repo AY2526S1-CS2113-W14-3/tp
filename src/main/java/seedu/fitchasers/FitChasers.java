@@ -166,7 +166,9 @@ public class FitChasers {
                 case "/exit":
                     ui.showMessage("Saving your progress...");
                     try {
-                        fileHandler.saveMonthList(userManager.getCurrentUser().getName(), currentMonth, workoutManager.getWorkouts());
+                        fileHandler.saveMonthList(userManager.getCurrentUser().getName(),
+                                currentMonth,
+                                workoutManager.getWorkouts());
                         ui.showExitMessage();
                     } catch (IOException e) {
                         ui.showError("Failed to save workouts before exit.");

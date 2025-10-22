@@ -1,11 +1,7 @@
 package seedu.fitchasers;
 
-import java.io.Serializable; // Added for serialization
-import java.time.format.DateTimeFormatter;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Represents a person with a name and a list of weight records.

@@ -42,7 +42,10 @@ public class Workout implements Serializable {
         this.username = username;
     }
 
-    public Workout(String workoutName, LocalDateTime workoutStartDateTime, LocalDateTime workoutEndDateTime, String username) {
+    public Workout(String workoutName,
+                   LocalDateTime workoutStartDateTime,
+                   LocalDateTime workoutEndDateTime,
+                   String username) {
         this.workoutName = workoutName;
         this.workoutStartDateTime = workoutStartDateTime;
         this.workoutEndDateTime = workoutEndDateTime;
