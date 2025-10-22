@@ -54,6 +54,7 @@ public class WeightManager {
 
             WeightRecord weightRecord = new WeightRecord(weightValue, entryDate);
             currentUser.addWeightRecord(weightRecord);
+            uiHandler.showMessage("Logging your weight... don't lie to me!");
             // Save weight history
             fileHandler.saveWeightHistory(currentUser.getName(), new ArrayList<>(currentUser.getWeightHistory()));
             uiHandler.showMessage("New weight recorded: " + weightRecord);

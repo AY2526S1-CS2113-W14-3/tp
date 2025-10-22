@@ -65,7 +65,7 @@ public class WorkoutManager {
         }
         if(timeStr.isEmpty()) {
             timeStr = LocalTime.now().format(DateTimeFormatter.ofPattern("HHmm"));
-            ui.showMessage("No date input detected - Using current time: " + timeStr);
+            ui.showMessage("No time input detected - Using current time: " + timeStr);
         }
 
         String dateTimeStr = dateStr + " " + timeStr;
@@ -80,6 +80,7 @@ public class WorkoutManager {
 
             workouts.add(newWorkout);
             currentWorkout = newWorkout;
+            ui.showMessage("New workout sesh incoming!");
             ui.showMessage("Added workout: " + workoutName + " for " + username);
         } catch (Exception e) {
             ui.showMessage("Invalid date/time format. Use: d/DD/MM/YY t/HHmm");
@@ -210,6 +211,7 @@ public class WorkoutManager {
 
             Exercise exercise = new Exercise(name, reps);
             currentWorkout.addExercise(exercise);
+            ui.showMessage("Adding that spicy new exercise!");
             ui.showMessage("Added exercise:\n" + exercise.toDetailedString());
         } catch (NumberFormatException e) {
             ui.showMessage("REPS must be a positive integer. Example: /add_exercise n/Push_Up r/12");
@@ -248,6 +250,7 @@ public class WorkoutManager {
             }
 
             currentExercise.addSet(reps);
+            ui.showMessage("Adding a new set to your exercise!");
             ui.showMessage("Added set to exercise:\n" + currentExercise.toDetailedString());
         } catch (NumberFormatException e) {
             ui.showMessage("REPS must be a positive integer. Example: /add_set r/15");
@@ -422,6 +425,7 @@ public class WorkoutManager {
                 currentWorkout.setWorkoutEndDateTime(endDateTime);
                 int duration = currentWorkout.calculateDuration();
                 currentWorkout.setDuration(duration);
+                ui.showMessage("Workout wrapped! Time to refuel!");
                 ui.showMessage(String.format(
                         "Workout '%s' ended. Duration: %d minute(s).",
                         currentWorkout.getWorkoutName(), duration

@@ -3,15 +3,19 @@ package seedu.fitchasers;
 import java.io.Serializable; // Added for serialization
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a person with a name and a list of weight records.
  */
-public class Person implements Serializable { // Added implements Serializable
+public class Person implements Serializable {
 
     private static final long serialVersionUID = 1L; // Added for serialization safety
-
     private String name;
+
+    /** The list of weight records for the person */
     private final ArrayList<WeightRecord> weightHistory;
     private final UI ui;
 
