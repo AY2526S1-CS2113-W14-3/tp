@@ -13,6 +13,7 @@ import java.util.Set;
  * Represents a workout session containing a name, duration, start/end times, and a list of exercises.
  */
 public class Workout implements Serializable {
+    private static final long serialVersionUID = 1L; // Added for serialization safety
     private static final UI ui = new UI();
     private final ArrayList<Exercise> exercises = new ArrayList<>();
     private String workoutName;
@@ -21,22 +22,32 @@ public class Workout implements Serializable {
     private LocalDateTime workoutEndDateTime;
     private Exercise currentExercise = null;
     private Set<String> tags = new LinkedHashSet<>();   // multiple tags
+    private final String username;
 
     public Workout(String workoutName, int duration) {
         this.workoutName = workoutName;
         this.duration = duration;
+        this.username = null;
     }
 
     public Workout(String workoutName, LocalDateTime workoutStartDateTime) {
         this.workoutName = workoutName;
         this.workoutStartDateTime = workoutStartDateTime;
+        this.username = null;
     }
 
-    public Workout(String workoutName, LocalDateTime workoutStartDateTime, LocalDateTime workoutEndDateTime) {
+    public Workout(String workoutName, LocalDateTime workoutStartDateTime, String username) {
+        this.workoutName = workoutName;
+        this.workoutStartDateTime = workoutStartDateTime;
+        this.username = username;
+    }
+
+    public Workout(String workoutName, LocalDateTime workoutStartDateTime, LocalDateTime workoutEndDateTime, String username) {
         this.workoutName = workoutName;
         this.workoutStartDateTime = workoutStartDateTime;
         this.workoutEndDateTime = workoutEndDateTime;
         this.duration = calculateDuration();
+        this.username = username;
     }
 
     public Set<String> getTags() {
@@ -106,6 +117,7 @@ public class Workout implements Serializable {
     public String getWorkoutDateString(){
         return formatWorkoutDate(workoutStartDateTime);
     }
+
     /**
      * Returns a formatted date string such as "Monday 30th of June"
      *
@@ -124,8 +136,6 @@ public class Workout implements Serializable {
         return String.format("%s %d%s of %s", dayOfWeek, dayOfMonth, suffix, month);
     }
 
-
-
     public void setWorkoutEndDateTime(LocalDateTime workoutEndDateTime) {
         this.workoutEndDateTime = workoutEndDateTime;
     }
@@ -135,6 +145,10 @@ public class Workout implements Serializable {
             return (int) Duration.between(workoutStartDateTime, workoutEndDateTime).toMinutes();
         }
         return 0;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     @Override

@@ -2,12 +2,15 @@ package seedu.fitchasers;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.io.Serializable;
 
 /**
  * Represents a single weight record for a person.
  * Each record stores the weight in kilograms and the date of measurement.
  */
-public class WeightRecord {
+public class WeightRecord implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /** The weight in kilograms */
     private final double weight;

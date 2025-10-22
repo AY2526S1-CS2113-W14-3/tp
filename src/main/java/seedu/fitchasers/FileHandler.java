@@ -27,13 +27,10 @@ import java.util.ArrayList;
  * EXERCISE | Bench Press | 12,10,8
  * END_WORKOUT
  */
-
 public class FileHandler {
 
     private static final Path DATA_DIR = Paths.get("data", "workouts");
     private final UI ui = new UI();
-
-
 
     /**
      * Ensures that the save file and its parent directory exist.
@@ -47,50 +44,95 @@ public class FileHandler {
     /**
      * Saves the given month's workout list into a serialized file inside /data/workouts/
      *
+     * @param username the username of the user
      * @param month the month of the workout list
      * @param list  the list of workouts to save
      * @throws IOException if saving fails
      */
-    public void saveMonthList(YearMonth month, ArrayList<Workout> list) throws IOException {
-        try{
+    public void saveMonthList(String username, YearMonth month, ArrayList<Workout> list) throws IOException {
+        try {
             ensureDataDir();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-
-        String filename = String.format("workouts_%s.dat", month); // e.g., workouts_2025-06.dat
+        String filename = String.format("workouts_%s_%s.dat", username, month); // e.g., workouts_Alice_2025-10.dat
         Path filePath = DATA_DIR.resolve(filename);
 
         try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(filePath))) {
             out.writeObject(list);
-            ui.showMessage("Saved " + list.size() + " workouts for " + month + ".");
+            ui.showMessage("Saved " + list.size() + " workouts for " + username + " in " + month + ".");
         }
     }
 
     /**
      * Loads the given month's workout list from a serialized file inside /data/workouts/.
      *
+     * @param username the username of the user
      * @param month the month of the workout list
      * @return the loaded workout list (empty if not found)
      * @throws IOException if loading fails
      */
     @SuppressWarnings("unchecked")
-    public ArrayList<Workout> loadMonthList(YearMonth month) throws IOException, FileNonexistent {
+    public ArrayList<Workout> loadMonthList(String username, YearMonth month) throws IOException, FileNonexistent {
         ensureDataDir();
 
-        String filename = String.format("workouts_%s.dat", month);
+        String filename = String.format("workouts_%s_%s.dat", username, month);
         Path filePath = DATA_DIR.resolve(filename);
 
         if (Files.notExists(filePath)) {
-            throw new FileNonexistent("No save file found for " + month);
+            throw new FileNonexistent("No save file found for " + username + " in " + month);
         }
 
         try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(filePath))) {
             return (ArrayList<Workout>) in.readObject();
         } catch (ClassNotFoundException e) {
-            throw new IOException("Workout class not found when reading file. " +
-                    "Something might've corrupted it", e);
+            ui.showError("Failed to load workouts for " + username + ": " + e.getMessage());
+            return new ArrayList<>(); // Return empty list on failure
+        }
+    }
+
+    /**
+     * Saves the weight history for a user.
+     *
+     * @param username the username of the user
+     * @param weightHistory the list of weight records to save
+     * @throws IOException if saving fails
+     */
+    public void saveWeightHistory(String username, ArrayList<WeightRecord> weightHistory) throws IOException {
+        ensureDataDir();
+        String filename = String.format("weight_%s.dat", username);
+        Path filePath = DATA_DIR.resolve(filename);
+
+        try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(filePath))) {
+            out.writeObject(weightHistory);
+            ui.showMessage("Saved weight history for " + username + ".");
+        }
+    }
+
+    /**
+     * Loads the weight history for a user.
+     *
+     * @param username the username of the user
+     * @return the loaded weight history (empty if not found)
+     * @throws IOException if loading fails
+     */
+    @SuppressWarnings("unchecked")
+    public ArrayList<WeightRecord> loadWeightHistory(String username) throws IOException, FileNonexistent {
+        ensureDataDir();
+        String filename = String.format("weight_%s.dat", username);
+        Path filePath = DATA_DIR.resolve(filename);
+
+        if (Files.notExists(filePath)) {
+            throw new FileNonexistent("No weight history file found for " + username);
+        }
+
+        try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(filePath))) {
+            return (ArrayList<WeightRecord>) in.readObject();
+        } catch (ClassNotFoundException | java.io.InvalidClassException e) {
+            // Handle corrupted or incompatible files by returning an empty list
+            ui.showError("Failed to load weight history for " + username + ": " + e.getMessage());
+            return new ArrayList<>();
         }
     }
 }

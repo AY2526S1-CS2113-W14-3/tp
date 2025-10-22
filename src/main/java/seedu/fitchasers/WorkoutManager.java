@@ -33,8 +33,9 @@ public class WorkoutManager {
      * Expected format: /create_workout n/NAME d/DD/MM/YY t/HHmm
      *
      * @param command the full user command containing workout details
+     * @param username the username of the user creating the workout
      */
-    public void addWorkout(String command) {
+    public void addWorkout(String command, String username) {
         String workoutName;
         if (command.contains("d/")) {
             workoutName = extractBetween(command, "n/", "d/").trim();
@@ -72,14 +73,14 @@ public class WorkoutManager {
 
         try {
             LocalDateTime workoutDateTime = LocalDateTime.parse(dateTimeStr, formatter);
-            Workout newWorkout = new Workout(workoutName, workoutDateTime);
+            Workout newWorkout = new Workout(workoutName, workoutDateTime, username);
             Set<String> mergedTags = new LinkedHashSet<>(newWorkout.getTags());
             mergedTags.addAll(tagger.suggest(newWorkout));
             newWorkout.setTags(mergedTags);
 
             workouts.add(newWorkout);
             currentWorkout = newWorkout;
-            ui.showMessage("Added workout: " + workoutName);
+            ui.showMessage("Added workout: " + workoutName + " for " + username);
         } catch (Exception e) {
             ui.showMessage("Invalid date/time format. Use: d/DD/MM/YY t/HHmm");
         }
@@ -435,4 +436,7 @@ public class WorkoutManager {
         }
     }
 
+    public Tagger getTagger() {
+        return tagger;
+    }
 }

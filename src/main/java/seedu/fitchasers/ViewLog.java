@@ -30,31 +30,32 @@ public class ViewLog {
 
     /* ----------------------------- Core renderers ----------------------------- */
 
-    /** Renders a month’s workouts with pagination. Sorting: newest first. */
+    /**
+     * Renders a month’s workouts with pagination. Sorting: newest first.
+     */
     public void render(String requestedPage) throws InvalidArgumentInput {
         boolean detailed = false;
         int requestedPageNumber;
 
-        if(requestedPage.contains("-d")){
+        if (requestedPage.contains("-d")) {
             detailed = true;
-            requestedPage = requestedPage.substring (requestedPage.indexOf("/d") + DETAILED_ARG_CONST);
+            requestedPage = requestedPage.substring(requestedPage.indexOf("/d") + DETAILED_ARG_CONST);
         }
         List<Workout> sortedArray = new ArrayList<>(workoutManager.getWorkouts());
         sortedArray.sort(Comparator.comparing(Workout::getWorkoutEndDateTime).reversed());
         this.lastFilteredSorted = sortedArray; // store for /open <n>
-        try{
-            if(requestedPage.isEmpty()){
+        try {
+            if (requestedPage.isEmpty()) {
                 requestedPage = "1";
             }
             requestedPageNumber = Integer.parseInt(requestedPage);
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             throw new InvalidArgumentInput("Page number must be an integer");
         }
         int currentPage = ensureValidPage(requestedPageNumber);
         int startIndex = (currentPage - 1) * pageSize;
         int endIndex = Math.min(startIndex + pageSize, sortedArray.size());
         int totalPages = computeTotalPages(sortedArray.size(), pageSize);
-
 
         ui.showMessage(String.format("Workouts (%d total) — Page %d/%d", sortedArray.size(), currentPage, totalPages));
         if (sortedArray.isEmpty()) {
@@ -100,7 +101,6 @@ public class ViewLog {
         //ui.showMessage("Type     : " + (type.isBlank() ? "-" : type));
         ui.showMessage("Tags     : " + (tags.isBlank() ? "-" : tags));
         // Add more fields from Workout here (sets/reps, notes, RPE, etc.)
-
     }
 
     /* ------------------------------ Commands API ----------------------------- */
@@ -255,6 +255,4 @@ public class ViewLog {
         String ampm = hr < 12 ? "AM" : "PM";
         return String.format("%s %d%s of %s, %d:%02d %s", dow, d, suffix, mon, hr12, min, ampm);
     }
-
 }
-

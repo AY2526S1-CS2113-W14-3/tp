@@ -3,6 +3,9 @@ package seedu.fitchasers;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import seedu.fitchasers.exceptions.FileNonexistent;
+import java.io.IOException;
 
 /**
  * Handles the recording and viewing of weight data for a person.
@@ -13,9 +16,21 @@ public class WeightManager {
 
     private final Person currentUser;
     private final UI uiHandler = new UI();
+    private final FileHandler fileHandler = new FileHandler();
 
     public WeightManager(Person person) {
         this.currentUser = person;
+        // Load weight history for the user
+        try {
+            ArrayList<WeightRecord> history = fileHandler.loadWeightHistory(person.getName());
+            for (WeightRecord record : history) {
+                currentUser.addWeightRecord(record);
+            }
+        } catch (FileNonexistent e) {
+            // No existing weight history, start with empty list
+        } catch (IOException e) {
+            uiHandler.showError("Failed to load weight history: " + e.getMessage());
+        }
     }
 
     /**
@@ -39,6 +54,8 @@ public class WeightManager {
 
             WeightRecord weightRecord = new WeightRecord(weightValue, entryDate);
             currentUser.addWeightRecord(weightRecord);
+            // Save weight history
+            fileHandler.saveWeightHistory(currentUser.getName(), new ArrayList<>(currentUser.getWeightHistory()));
             uiHandler.showMessage("New weight recorded: " + weightRecord);
 
         } catch (NumberFormatException nfe) {

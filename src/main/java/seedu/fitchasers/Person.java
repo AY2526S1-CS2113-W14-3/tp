@@ -1,33 +1,30 @@
 package seedu.fitchasers;
 
-import java.io.Serializable;
+import java.io.Serializable; // Added for serialization
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
 
 /**
- * Represents a person using the FitChasers app.
- * Stores the person's name and their weight history.
+ * Represents a person with a name and a list of weight records.
  */
-public class Person implements Serializable {
+public class Person implements Serializable { // Added implements Serializable
 
-    /** The name of the person */
+    private static final long serialVersionUID = 1L; // Added for serialization safety
+
     private String name;
-
-    /** The list of weight records for the person */
     private final ArrayList<WeightRecord> weightHistory;
+    private final UI ui;
 
     /**
-     * Constructs a new Person with the given name.
+     * Constructs a new Person with the specified name.
      * Initializes an empty weight history.
      *
      * @param name The name of the person
-     * @throws IllegalArgumentException if name is null or empty
      */
     public Person(String name) {
-        setName(name); // reuse setter để kiểm tra name
+        this.name = name;
         this.weightHistory = new ArrayList<>();
+        this.ui = new UI();
     }
 
     /**
@@ -40,84 +37,44 @@ public class Person implements Serializable {
     }
 
     /**
-     * Updates the name of the person.
+     * Sets the name of the person.
      *
-     * @param newName The new name
-     * @throws IllegalArgumentException if newName is null or empty
+     * @param name The new name for the person
      */
-    public void setName(String newName) {
-        if (newName == null || newName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be null or empty.");
-        }
-        this.name = newName.trim();
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
      * Adds a weight record to the person's weight history.
      *
-     * @param record The WeightRecord to add
-     * @throws NullPointerException if record is null
+     * @param weightRecord The weight record to add
      */
-    public void addWeightRecord(WeightRecord record) {
-        Objects.requireNonNull(record, "WeightRecord cannot be null.");
-        weightHistory.add(record);
+    public void addWeightRecord(WeightRecord weightRecord) {
+        weightHistory.add(weightRecord);
     }
 
     /**
-     * Returns an unmodifiable copy of the weight history.
-     *
-     * @return A List of WeightRecord objects
-     */
-    public List<WeightRecord> getWeightHistory() {
-        return Collections.unmodifiableList(new ArrayList<>(weightHistory));
-    }
-
-    /**
-     * Displays the weight history in the console.
-     * Prints a message if there are no records.
+     * Displays the person's weight history in a formatted manner.
+     * If no weight records exist, informs the user.
      */
     public void displayWeightHistory() {
         if (weightHistory.isEmpty()) {
-            System.out.println(name + " has no weight records yet.");
+            ui.showMessage("No weight history recorded yet.");
             return;
         }
-        System.out.println("Weight history for " + name + ":");
+
         for (WeightRecord record : weightHistory) {
-            System.out.println("  " + record);
+            ui.showMessage(record.toString());
         }
     }
 
     /**
-     * Returns the most recent weight recorded for the person.
+     * Returns the person's weight history.
      *
-     * @return The latest weight, or -1 if no records exist
+     * @return The list of weight records
      */
-    public double getLatestWeight() {
-        if (weightHistory.isEmpty()) {
-            return -1; // dùng -1 để phân biệt không có dữ liệu
-        }
-        return weightHistory.get(weightHistory.size() - 1).getWeight();
-    }
-
-    /**
-     * Returns the number of weight records.
-     *
-     * @return the size of the weight history
-     */
-    public int getWeightHistorySize() {
-        return weightHistory.size();
-    }
-
-    /**
-     * Removes the most recent weight record.
-     *
-     * @return true if a record was removed, false if no records exist
-     */
-    public boolean removeLatestWeightRecord() {
-        if (weightHistory.isEmpty()) {
-            return false;
-        }
-        weightHistory.remove(weightHistory.size() - 1);
-        return true;
+    public ArrayList<WeightRecord> getWeightHistory() {
+        return weightHistory;
     }
 }
