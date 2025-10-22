@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -150,64 +149,64 @@ public class WorkoutManagerTest {
                 "Success message should be printed after retry");
     }
 
-//    @Test
-//    public void testDeleteWorkoutByIndex_validIndex_yInput_success() {
-//        workoutManager.addWorkout("/create_workout n/Test Workout", "testUser");
-//        String input = "y\n"; // Match interactive input that worked
-//        System.setIn(new ByteArrayInputStream(input.getBytes()));
-//        outContent.reset(); // Clear output before calling method
-//        workoutManager.deleteWorkoutByIndex(0);
-//        System.err.println("Debug Output (y input): " + outContent.toString());
-//        assertEquals(0, workoutManager.getWorkoutSize(),
-//                "Workout should be deleted with 'y' input");
-//        assertTrue(outContent.toString().contains("Deleted workout"),
-//                "Success message should be printed");
-//        assertFalse(outContent.toString().contains("Okay, deletion aborted"),
-//                "Deletion should not be aborted");
-//    }
-//
-//    @Test
-//    public void testDeleteWorkoutByIndex_validIndex_yNoNewline_success() {
-//        workoutManager.addWorkout("/create_workout n/Test Workout", "testUser");
-//        String input = "y"; // Test without newline, in case Scanner.next() is used
-//        System.setIn(new ByteArrayInputStream(input.getBytes()));
-//        outContent.reset();
-//        workoutManager.deleteWorkoutByIndex(0);
-//        System.err.println("Debug Output (y no newline): " + outContent.toString());
-//        assertEquals(0, workoutManager.getWorkoutSize(),
-//                "Workout should be deleted with 'y' input");
-//        assertTrue(outContent.toString().contains("Deleted workout"),
-//                "Success message should be printed");
-//        assertFalse(outContent.toString().contains("Okay, deletion aborted"),
-//                "Deletion should not be aborted");
-//    }
-//
-//    @Test
-//    public void testDeleteWorkoutByName_validName_success() {
-//        workoutManager.addWorkout("/create_workout n/Test Workout", "testUser");
-//        String input = "y\n"; // Match interactive input from console
-//        System.setIn(new ByteArrayInputStream(input.getBytes()));
-//        outContent.reset();
-//        workoutManager.deleteWorkout("Test Workout");
-//        System.err.println("Debug Output (delete by name, y input): " + outContent.toString());
-//        assertEquals(0, workoutManager.getWorkoutSize(),
-//                "Workout should be deleted with 'y' input");
-//        assertTrue(outContent.toString().contains("Workout deleted successfully"),
-//                "Success message should be printed");
-//        assertFalse(outContent.toString().contains("Okay, I didn’t delete it"),
-//                "Deletion should not be aborted");
-//    }
-//
-//    @Test
-//    public void testInteractiveDeleteWorkout_validSelection_success() {
-//        workoutManager.addWorkout("/create_workout n/Test Workout d/22/10/25 t/0900",
-//                "testUser");
-//        String input = "1\n";
-//        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-//        workoutManager.interactiveDeleteWorkout("/delete_workout d/22/10/25", scanner);
-//
-//        assertEquals(0, workoutManager.getWorkoutSize(), "Workout should be deleted");
-//        assertTrue(outContent.toString().contains("Delete: Test Workout"),
-//                "Success message should be printed");
-//    }
+    //    @Test
+    //    public void testDeleteWorkoutByIndex_validIndex_yInput_success() {
+    //        workoutManager.addWorkout("/create_workout n/Test Workout", "testUser");
+    //        String input = "y\n"; // Match interactive input that worked
+    //        System.setIn(new ByteArrayInputStream(input.getBytes()));
+    //        outContent.reset(); // Clear output before calling method
+    //        workoutManager.deleteWorkoutByIndex(0);
+    //        System.err.println("Debug Output (y input): " + outContent.toString());
+    //        assertEquals(0, workoutManager.getWorkoutSize(),
+    //                "Workout should be deleted with 'y' input");
+    //        assertTrue(outContent.toString().contains("Deleted workout"),
+    //                "Success message should be printed");
+    //        assertFalse(outContent.toString().contains("Okay, deletion aborted"),
+    //                "Deletion should not be aborted");
+    //    }
+    //
+    //    @Test
+    //    public void testDeleteWorkoutByIndex_validIndex_yNoNewline_success() {
+    //        workoutManager.addWorkout("/create_workout n/Test Workout", "testUser");
+    //        String input = "y"; // Test without newline, in case Scanner.next() is used
+    //        System.setIn(new ByteArrayInputStream(input.getBytes()));
+    //        outContent.reset();
+    //        workoutManager.deleteWorkoutByIndex(0);
+    //        System.err.println("Debug Output (y no newline): " + outContent.toString());
+    //        assertEquals(0, workoutManager.getWorkoutSize(),
+    //                "Workout should be deleted with 'y' input");
+    //        assertTrue(outContent.toString().contains("Deleted workout"),
+    //                "Success message should be printed");
+    //        assertFalse(outContent.toString().contains("Okay, deletion aborted"),
+    //                "Deletion should not be aborted");
+    //    }
+    //
+    //    @Test
+    //    public void testDeleteWorkoutByName_validName_success() {
+    //        workoutManager.addWorkout("/create_workout n/Test Workout", "testUser");
+    //        String input = "y\n"; // Match interactive input from console
+    //        System.setIn(new ByteArrayInputStream(input.getBytes()));
+    //        outContent.reset();
+    //        workoutManager.deleteWorkout("Test Workout");
+    //        System.err.println("Debug Output (delete by name, y input): " + outContent.toString());
+    //        assertEquals(0, workoutManager.getWorkoutSize(),
+    //                "Workout should be deleted with 'y' input");
+    //        assertTrue(outContent.toString().contains("Workout deleted successfully"),
+    //                "Success message should be printed");
+    //        assertFalse(outContent.toString().contains("Okay, I didn’t delete it"),
+    //                "Deletion should not be aborted");
+    //    }
+    //
+    //    @Test
+    //    public void testInteractiveDeleteWorkout_validSelection_success() {
+    //        workoutManager.addWorkout("/create_workout n/Test Workout d/22/10/25 t/0900",
+    //                "testUser");
+    //        String input = "1\n";
+    //        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+    //        workoutManager.interactiveDeleteWorkout("/delete_workout d/22/10/25", scanner);
+    //
+    //        assertEquals(0, workoutManager.getWorkoutSize(), "Workout should be deleted");
+    //        assertTrue(outContent.toString().contains("Delete: Test Workout"),
+    //                "Success message should be printed");
+    //    }
 }
