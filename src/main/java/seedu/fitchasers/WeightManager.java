@@ -15,19 +15,27 @@ public class WeightManager {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yy");
 
     private final Person currentUser;
-    private final UI uiHandler = new UI();
-    private final FileHandler fileHandler = new FileHandler();
+    private final UI uiHandler;
+    private final FileHandler fileHandler;
 
+    // Constructor mặc định (dùng trong app)
     public WeightManager(Person person) {
+        this(person, new UI(), new FileHandler());
+    }
+
+    // Constructor dùng cho test (cho phép truyền mock)
+    public WeightManager(Person person, UI uiHandler, FileHandler fileHandler) {
         this.currentUser = person;
-        // Load weight history for the user
+        this.uiHandler = uiHandler;
+        this.fileHandler = fileHandler;
+
         try {
             ArrayList<WeightRecord> history = fileHandler.loadWeightHistory(person.getName());
             for (WeightRecord record : history) {
                 currentUser.addWeightRecord(record);
             }
         } catch (FileNonexistent e) {
-            // No existing weight history, start with empty list
+            // Bắt đầu với danh sách rỗng
         } catch (IOException e) {
             uiHandler.showError("Failed to load weight history: " + e.getMessage());
         }

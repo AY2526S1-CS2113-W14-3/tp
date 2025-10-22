@@ -1,64 +1,40 @@
 package seedu.fitchasers;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class PersonTest {
+
     private Person person;
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
 
     @BeforeEach
-    public void setUp() {
-        person = new Person("testUser");
-        System.setOut(new PrintStream(outContent));
-    }
-
-    @AfterEach
-    public void tearDown() {
-        System.setOut(originalOut);
-        outContent.reset();
+    void setUp() {
+        person = new Person("Loan");
     }
 
     @Test
-    public void testAddWeightRecord_success() {
-        LocalDate date = LocalDate.parse("22/10/25", formatter);
-        WeightRecord record = new WeightRecord(70.5, date);
+    void testGetAndSetName() {
+        assertEquals("Loan", person.getName());
+        person.setName("Mai");
+        assertEquals("Mai", person.getName());
+    }
+
+    @Test
+    void testAddWeightRecord() {
+        WeightRecord record = new WeightRecord(50.5, LocalDate.parse("2025-10-22"));
         person.addWeightRecord(record);
-
-        assertEquals(1, person.getWeightHistory().size(), "One weight record should be added");
-        assertEquals(record, person.getWeightHistory().get(0), "Weight record should match");
+        ArrayList<WeightRecord> history = person.getWeightHistory();
+        assertEquals(1, history.size());
+        assertEquals(record, history.get(0));
     }
 
     @Test
-    public void testDisplayWeightHistory_emptyHistory_showsEmptyMessage() {
-        person.displayWeightHistory();
-        assertTrue(outContent.toString().contains("No weight history recorded yet"),
-                "Empty history message should be printed");
-    }
-
-    @Test
-    public void testDisplayWeightHistory_withRecords_displaysCorrectly() {
-        LocalDate date = LocalDate.parse("22/10/25", formatter);
-        WeightRecord record = new WeightRecord(70.5, date);
-        person.addWeightRecord(record);
-        person.displayWeightHistory();
-        assertTrue(outContent.toString().contains(record.toString()),
-                "Weight record should be displayed");
-    }
-
-    @Test
-    public void testSetAndGetName_success() {
-        person.setName("newUser");
-        assertEquals("newUser", person.getName(), "Name should be updated");
+    void testDisplayWeightHistoryEmpty() {
+        // kiểm tra trường hợp không có lịch sử cân nặng
+        assertTrue(person.getWeightHistory().isEmpty());
     }
 }

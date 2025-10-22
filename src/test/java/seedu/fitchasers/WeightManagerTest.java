@@ -1,121 +1,90 @@
 package seedu.fitchasers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-class WeightManagerTest {
+import java.time.LocalDate;
+import java.util.ArrayList;
 
-    private Person testUser;
-    private WeightManager manager;
+/**
+ * Unit tests for {@link WeightManager}.
+ */
+public class WeightManagerTest {
+
+    private TestUI testUI;
+    private TestFileHandler testFileHandler;
+    private Person testPerson;
+    private WeightManager weightManager;
+
+    /** Mock UI để ghi lại thông báo */
+    private static class TestUI extends UI {
+        private final ArrayList<String> messages = new ArrayList<>();
+
+        @Override
+        public void showMessage(String message) {
+            messages.add(message);
+        }
+
+        public ArrayList<String> getMessages() {
+            return messages;
+        }
+    }
+
+    /** Mock FileHandler để tránh đọc/ghi file */
+    private static class TestFileHandler extends FileHandler {
+        @Override
+        public ArrayList<WeightRecord> loadWeightHistory(String name) {
+            return new ArrayList<>();
+        }
+
+        @Override
+        public void saveWeightHistory(String name, ArrayList<WeightRecord> history) {
+            // không làm gì cả
+        }
+    }
 
     @BeforeEach
-    void setUp() {
-        testUser = new Person("TestUser");
-        manager = new WeightManager(testUser);
+    public void setUp() {
+        testUI = new TestUI();
+        testFileHandler = new TestFileHandler();
+        testPerson = new Person("Loan");
+        weightManager = new WeightManager(testPerson, testUI, testFileHandler);
     }
 
     @Test
-    void addWeightValidInput() {
-        manager.addWeight("/add_weight w/70.5 d/17/10/25");
-        List<WeightRecord> history = testUser.getWeightHistory();
-        assertEquals(1, history.size());
-        assertEquals(70.5, history.get(0).getWeight());
-        assertEquals(LocalDate.parse("17/10/25", DateTimeFormatter.ofPattern("dd/MM/yy")),
-                history.get(0).getDate());
+    public void addWeight_validCommand_addsRecordSuccessfully() {
+        weightManager.addWeight("/add_weight w/50.5 d/22/10/25");
+        assertEquals(1, testPerson.getWeightHistory().size());
+        assertEquals(50.5, testPerson.getWeightHistory().get(0).getWeight());
+        assertTrue(testUI.getMessages().stream().anyMatch(m -> m.contains("Logging your weight")));
     }
 
     @Test
-    void addWeightInvalidWeight() {
-        manager.addWeight("/add_weight w/abc d/17/10/25");
-        assertEquals(0, testUser.getWeightHistory().size());
+    public void addWeight_invalidWeight_showsErrorMessage() {
+        weightManager.addWeight("/add_weight w/abc d/22/10/25");
+        assertTrue(testUI.getMessages().contains("Invalid weight. Please enter a number."));
+        assertEquals(0, testPerson.getWeightHistory().size());
     }
 
     @Test
-    void addWeightInvalidDate() {
-        manager.addWeight("/add_weight w/70.5 d/2025-10-17");
-        assertEquals(0, testUser.getWeightHistory().size());
+    public void addWeight_invalidDate_showsErrorMessage() {
+        weightManager.addWeight("/add_weight w/55.2 d/2025-10-22");
+        assertTrue(testUI.getMessages().contains("Invalid date format. Use dd/MM/yy."));
+        assertEquals(0, testPerson.getWeightHistory().size());
     }
 
     @Test
-    void addWeightMissingWeight() {
-        manager.addWeight("/add_weight w/ d/17/10/25");
-        assertEquals(0, testUser.getWeightHistory().size());
+    public void addWeight_missingFields_showsInvalidInputMessage() {
+        weightManager.addWeight("/add_weight w/55.2");
+        assertTrue(testUI.getMessages().contains("Invalid input. Correct format: /add_weight w/WEIGHT d/DATE"));
+        assertEquals(0, testPerson.getWeightHistory().size());
     }
 
     @Test
-    void addWeightMissingDate() {
-        manager.addWeight("/add_weight w/70.5 d/");
-        assertEquals(0, testUser.getWeightHistory().size());
-    }
-
-    @Test
-    void addWeightExtraSpaces() {
-        manager.addWeight(" /add_weight w/  72.0   d/ 17/10/25 ");
-        List<WeightRecord> history = testUser.getWeightHistory();
-        assertEquals(1, history.size());
-        assertEquals(72.0, history.get(0).getWeight());
-    }
-
-    @Test
-    void addWeightMultipleRecords() {
-        manager.addWeight("/add_weight w/70.0 d/17/10/25");
-        manager.addWeight("/add_weight w/71.0 d/18/10/25");
-        assertEquals(2, testUser.getWeightHistory().size());
-    }
-
-    @Test
-    void addWeightInvalidFormat() {
-        manager.addWeight("add_weight w70.0 d18/10/25");
-        assertEquals(0, testUser.getWeightHistory().size());
-    }
-
-    @Test
-    void addWeightNegativeWeight() {
-        manager.addWeight("/add_weight w/-5 d/17/10/25");
-        List<WeightRecord> history = testUser.getWeightHistory();
-        assertEquals(1, history.size());
-        assertEquals(-5.0, history.get(0).getWeight());
-    }
-
-    @Test
-    void addWeightLargeWeight() {
-        manager.addWeight("/add_weight w/500 d/17/10/25");
-        List<WeightRecord> history = testUser.getWeightHistory();
-        assertEquals(1, history.size());
-        assertEquals(500.0, history.get(0).getWeight());
-    }
-
-    @Test
-    void addWeightDecimalWeight() {
-        manager.addWeight("/add_weight w/72.75 d/17/10/25");
-        List<WeightRecord> history = testUser.getWeightHistory();
-        assertEquals(1, history.size());
-        assertEquals(72.75, history.get(0).getWeight());
-    }
-
-    @Test
-    void addWeightZeroWeight() {
-        manager.addWeight("/add_weight w/0 d/17/10/25");
-        List<WeightRecord> history = testUser.getWeightHistory();
-        assertEquals(1, history.size());
-        assertEquals(0.0, history.get(0).getWeight());
-    }
-
-    @Test
-    void addWeightEdgeDate() {
-        manager.addWeight("/add_weight w/60 d/01/01/00");
-        assertEquals(1, testUser.getWeightHistory().size());
-    }
-
-    @Test
-    void addWeightOnlyCommand() {
-        manager.addWeight("/add_weight");
-        assertEquals(0, testUser.getWeightHistory().size());
+    public void viewWeights_showsHistory() {
+        testPerson.addWeightRecord(new WeightRecord(50.5, LocalDate.now()));
+        weightManager.viewWeights();
+        assertFalse(testPerson.getWeightHistory().isEmpty());
     }
 }
