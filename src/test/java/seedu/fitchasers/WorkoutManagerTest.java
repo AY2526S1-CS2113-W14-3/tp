@@ -3,7 +3,9 @@ package seedu.fitchasers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -11,9 +13,7 @@ import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.Scanner;
-import java.util.Set;
 
 public class WorkoutManagerTest {
     private WorkoutManager workoutManager;
@@ -47,9 +47,11 @@ public class WorkoutManagerTest {
         Workout workout = workouts.get(0);
         assertEquals("Morning Run", workout.getWorkoutName(), "Workout name should match");
         assertEquals(username, workout.getUsername(), "Username should match");
-        assertEquals(LocalDateTime.parse("22/10/25 0900", DateTimeFormatter.ofPattern("dd/MM/yy HHmm")),
+        assertEquals(LocalDateTime.parse("22/10/25 0900",
+                        DateTimeFormatter.ofPattern("dd/MM/yy HHmm")),
                 workout.getWorkoutStartDateTime(), "Start date-time should match");
-        assertTrue(outContent.toString().contains("New workout sesh incoming!"), "Success message should be printed");
+        assertTrue(outContent.toString().contains("New workout sesh incoming!"),
+                "Success message should be printed");
     }
 
     @Test
@@ -60,8 +62,10 @@ public class WorkoutManagerTest {
 
         ArrayList<Workout> workouts = workoutManager.getWorkouts();
         assertEquals(1, workouts.size(), "Workout list should contain one workout");
-        assertTrue(outContent.toString().contains("No date input detected"), "Default date message should be printed");
-        assertTrue(outContent.toString().contains("No time input detected"), "Default time message should be printed");
+        assertTrue(outContent.toString().contains("No date input detected"),
+                "Default date message should be printed");
+        assertTrue(outContent.toString().contains("No time input detected"),
+                "Default time message should be printed");
     }
 
     @Test
@@ -71,7 +75,8 @@ public class WorkoutManagerTest {
         workoutManager.addWorkout(command, username);
 
         assertEquals(0, workoutManager.getWorkoutSize(), "No workout should be added");
-        assertTrue(outContent.toString().contains("Invalid date/time format"), "Error message should be printed");
+        assertTrue(outContent.toString().contains("Invalid date/time format"),
+                "Error message should be printed");
     }
 
     @Test
@@ -84,13 +89,15 @@ public class WorkoutManagerTest {
         assertEquals(1, exercises.size(), "One exercise should be added");
         assertEquals("Push Up", exercises.get(0).getName(), "Exercise name should match");
         assertEquals(10, exercises.get(0).getSets().get(0), "Reps should match");
-        assertTrue(outContent.toString().contains("Adding that spicy new exercise!"), "Success message should be printed");
+        assertTrue(outContent.toString().contains("Adding that spicy new exercise!"),
+                "Success message should be printed");
     }
 
     @Test
     public void testAddExercise_noActiveWorkout_error() {
         workoutManager.addExercise("/add_exercise n/Push Up r/10");
-        assertTrue(outContent.toString().contains("No active workout"), "Error message should be printed");
+        assertTrue(outContent.toString().contains("No active workout"),
+                "Error message should be printed");
     }
 
     @Test
@@ -103,37 +110,44 @@ public class WorkoutManagerTest {
         Exercise exercise = currentWorkout.getExercises().get(0);
         assertEquals(2, exercise.getSets().size(), "Two sets should be added");
         assertEquals(15, exercise.getSets().get(1), "Second set reps should match");
-        assertTrue(outContent.toString().contains("Adding a new set to your exercise!"), "Success message should be printed");
+        assertTrue(outContent.toString().contains("Adding a new set to your exercise!"),
+                "Success message should be printed");
     }
 
     @Test
     public void testAddSet_noExercise_error() {
         workoutManager.addWorkout("/create_workout n/Test Workout", "testUser");
         workoutManager.addSet("/add_set r/15");
-        assertTrue(outContent.toString().contains("No exercise found"), "Error message should be printed");
+        assertTrue(outContent.toString().contains("No exercise found"),
+                "Error message should be printed");
     }
 
     @Test
     public void testEndWorkout_validInput_success() {
-        workoutManager.addWorkout("/create_workout n/Test Workout d/22/10/25 t/0900", "testUser");
+        workoutManager.addWorkout("/create_workout n/Test Workout d/22/10/25 t/0900",
+                "testUser");
         String input = "/end_workout d/22/10/25 t/1000";
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         workoutManager.endWorkout(scanner, input);
 
         Workout workout = workoutManager.getWorkouts().get(0);
         assertEquals(60, workout.getDuration(), "Duration should be 60 minutes");
-        assertTrue(outContent.toString().contains("Workout wrapped!"), "Success message should be printed");
+        assertTrue(outContent.toString().contains("Workout wrapped!"),
+                "Success message should be printed");
     }
 
     @Test
     public void testEndWorkout_invalidTime_promptRetry() {
-        workoutManager.addWorkout("/create_workout n/Test Workout d/22/10/25 t/0900", "testUser");
+        workoutManager.addWorkout("/create_workout n/Test Workout d/22/10/25 t/0900",
+                "testUser");
         String input = "/end_workout d/22/10/25 t/0800\n/end_workout d/22/10/25 t/1000";
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         workoutManager.endWorkout(scanner, "/end_workout d/22/10/25 t/0800");
 
-        assertTrue(outContent.toString().contains("End time must be after the start time"), "Error message should be printed");
-        assertTrue(outContent.toString().contains("Workout wrapped!"), "Success message should be printed after retry");
+        assertTrue(outContent.toString().contains("End time must be after the start time"),
+                "Error message should be printed");
+        assertTrue(outContent.toString().contains("Workout wrapped!"),
+                "Success message should be printed after retry");
     }
 
 //    @Test
@@ -144,35 +158,28 @@ public class WorkoutManagerTest {
 //        outContent.reset(); // Clear output before calling method
 //        workoutManager.deleteWorkoutByIndex(0);
 //        System.err.println("Debug Output (y input): " + outContent.toString());
-//        assertEquals(0, workoutManager.getWorkoutSize(), "Workout should be deleted with 'y' input");
-//        assertTrue(outContent.toString().contains("Deleted workout"), "Success message should be printed");
-//        assertFalse(outContent.toString().contains("Okay, deletion aborted"), "Deletion should not be aborted");
+//        assertEquals(0, workoutManager.getWorkoutSize(),
+//                "Workout should be deleted with 'y' input");
+//        assertTrue(outContent.toString().contains("Deleted workout"),
+//                "Success message should be printed");
+//        assertFalse(outContent.toString().contains("Okay, deletion aborted"),
+//                "Deletion should not be aborted");
 //    }
 //
 //    @Test
-//    public void testDeleteWorkoutByIndex_validIndex_yesInput_success() {
+//    public void testDeleteWorkoutByIndex_validIndex_yNoNewline_success() {
 //        workoutManager.addWorkout("/create_workout n/Test Workout", "testUser");
-//        String input = "yes\n"; // Test alternative input
+//        String input = "y"; // Test without newline, in case Scanner.next() is used
 //        System.setIn(new ByteArrayInputStream(input.getBytes()));
 //        outContent.reset();
 //        workoutManager.deleteWorkoutByIndex(0);
-//        System.err.println("Debug Output (yes input): " + outContent.toString());
-//        assertEquals(0, workoutManager.getWorkoutSize(), "Workout should be deleted with 'yes' input");
-//        assertTrue(outContent.toString().contains("Deleted workout"), "Success message should be printed");
-//        assertFalse(outContent.toString().contains("Okay, deletion aborted"), "Deletion should not be aborted");
-//    }
-//
-//    @Test
-//    public void testDeleteWorkoutByIndex_validIndex_YInput_success() {
-//        workoutManager.addWorkout("/create_workout n/Test Workout", "testUser");
-//        String input = "Y\n"; // Test uppercase 'Y'
-//        System.setIn(new ByteArrayInputStream(input.getBytes()));
-//        outContent.reset();
-//        workoutManager.deleteWorkoutByIndex(0);
-//        System.err.println("Debug Output (Y input): " + outContent.toString());
-//        assertEquals(0, workoutManager.getWorkoutSize(), "Workout should be deleted with 'Y' input");
-//        assertTrue(outContent.toString().contains("Deleted workout"), "Success message should be printed");
-//        assertFalse(outContent.toString().contains("Okay, deletion aborted"), "Deletion should not be aborted");
+//        System.err.println("Debug Output (y no newline): " + outContent.toString());
+//        assertEquals(0, workoutManager.getWorkoutSize(),
+//                "Workout should be deleted with 'y' input");
+//        assertTrue(outContent.toString().contains("Deleted workout"),
+//                "Success message should be printed");
+//        assertFalse(outContent.toString().contains("Okay, deletion aborted"),
+//                "Deletion should not be aborted");
 //    }
 //
 //    @Test
@@ -183,19 +190,24 @@ public class WorkoutManagerTest {
 //        outContent.reset();
 //        workoutManager.deleteWorkout("Test Workout");
 //        System.err.println("Debug Output (delete by name, y input): " + outContent.toString());
-//        assertEquals(0, workoutManager.getWorkoutSize(), "Workout should be deleted with 'y' input");
-//        assertTrue(outContent.toString().contains("Workout deleted successfully"), "Success message should be printed");
-//        assertFalse(outContent.toString().contains("Okay, I didn’t delete it"), "Deletion should not be aborted");
+//        assertEquals(0, workoutManager.getWorkoutSize(),
+//                "Workout should be deleted with 'y' input");
+//        assertTrue(outContent.toString().contains("Workout deleted successfully"),
+//                "Success message should be printed");
+//        assertFalse(outContent.toString().contains("Okay, I didn’t delete it"),
+//                "Deletion should not be aborted");
 //    }
 //
 //    @Test
 //    public void testInteractiveDeleteWorkout_validSelection_success() {
-//        workoutManager.addWorkout("/create_workout n/Test Workout d/22/10/25 t/0900", "testUser");
+//        workoutManager.addWorkout("/create_workout n/Test Workout d/22/10/25 t/0900",
+//                "testUser");
 //        String input = "1\n";
 //        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
 //        workoutManager.interactiveDeleteWorkout("/delete_workout d/22/10/25", scanner);
 //
 //        assertEquals(0, workoutManager.getWorkoutSize(), "Workout should be deleted");
-//        assertTrue(outContent.toString().contains("Delete: Test Workout"), "Success message should be printed");
+//        assertTrue(outContent.toString().contains("Delete: Test Workout"),
+//                "Success message should be printed");
 //    }
 }

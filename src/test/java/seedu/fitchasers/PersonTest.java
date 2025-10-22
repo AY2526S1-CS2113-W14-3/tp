@@ -3,7 +3,8 @@ package seedu.fitchasers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -41,7 +42,8 @@ public class PersonTest {
     @Test
     public void testDisplayWeightHistory_emptyHistory_showsEmptyMessage() {
         person.displayWeightHistory();
-        assertTrue(outContent.toString().contains("No weight history recorded yet"), "Empty history message should be printed");
+        assertTrue(outContent.toString().contains("No weight history recorded yet"),
+                "Empty history message should be printed");
     }
 
     @Test
@@ -50,7 +52,8 @@ public class PersonTest {
         WeightRecord record = new WeightRecord(70.5, date);
         person.addWeightRecord(record);
         person.displayWeightHistory();
-        assertTrue(outContent.toString().contains(record.toString()), "Weight record should be displayed");
+        assertTrue(outContent.toString().contains(record.toString()),
+                "Weight record should be displayed");
     }
 
     @Test
