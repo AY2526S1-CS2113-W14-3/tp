@@ -254,6 +254,10 @@ The `WorkoutManager` component is responsible for managing all workout-related o
 workout creation, exercise tracking, and workout history management.
 
 ![Alt text](./diagrams/WorkoutManager_class_diagram.png "Basic Architecture")
+
+In addition to the class diagram, the following object diagram illustrates a snapshot of the `WorkoutManager` system at runtime, showing how key objects interact and maintain state during execution.
+![Alt text](./diagrams/WorkoutManager_object_diagram.png)
+
 ### Overview
 The `WorkoutManager` acts as the central controller for workout operations. It maintains a list of completed workouts 
 and tracks the current active workout session. 
